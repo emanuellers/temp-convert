@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convert Temperatures</title>
+    <style>
+        .grid-container {
+            display: grid;
+            grid-template-columns: 350px ;
+            grid-gap: 4px;
+            background-color: #2196F3;
+            padding: 3px;
+            width: 351px;
+        }
+        .grid-container > div {
+            background-color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            padding: 3px 0;
+            font-size: 16px;
+            display: grid;
+            place-items: center;
+          }
+        input, select{
+            width: 200px;
+            font-size: 16px;
+            height: 26px;
+        }
+        label { display: inline-block }
+        select { display: block }
+    </style>
+</head>
+<body>
+    <div id="temp-from" class="grid-container">
+        <div>
+            <label to="temp-si-initial">Convert from</label>
+            <select id="temp-si-initial">
+                <option></option>
+                <option value="C">Celsius</option>
+                <option value="F">Fahrenheit</option>
+                <option value="K">Kelvin</option>
+            </select>
+        </div>
+        <div>
+            <input type="number" id="temp-si-initial-value">
+        </div>
+    </div>
+    <div id="temp-to" class="grid-container" id="second">
+        <div>
+            <label to="temp-si-final">Convert to</label>
+            <select id="temp-si-final">
+                <option></option>
+                <option value="C">Celsius</option>
+                <option value="F">Fahrenheit</option>
+                <option  value="K">Kelvin</option>
+            </select>
+        </div>
+        <div id="result">
+
+        </div>
+    </div>
+    <div class="grid-container">
+        <button onclick="convert()">Convert</button> 
+    </div>
+    <script>
+        function convert(){
+            var initialFormat = document.getElementById("temp-si-initial").value;
+            var finalFormat = document.getElementById("temp-si-final").value;
+            var tempToConvert = document.getElementById("temp-si-initial-value").value;
+
+            if(
+            initialFormat == null || 
+            finalFormat ==null ||
+            initialFormat== "" ||
+            finalFormat == "" ||
+            tempToConvert == null || 
+            tempToConvert == ""
+            ){
+                alert("Select format of conversion.");
+                return;
+            }
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4){
+                    document.getElementById('result').innerHTML = xhr.responseText;
+                }
+            };
+            console.log('/conversion?initialFormat=' + initialFormat +'&finalFormat=' + finalFormat + '&temp=' + tempToConvert);
+            xhr.open('GET', '/conversion?initialFormat=' + initialFormat +'&finalFormat=' + finalFormat + '&temp=' + tempToConvert);
+            xhr.send();
+        }
+    </script>
+</body>
+</html>
